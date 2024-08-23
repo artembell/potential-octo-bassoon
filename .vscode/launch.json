@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        {
+            "type": "node-terminal",
+            "name": "Run Script: root/start",
+            "request": "launch",
+            "command": "npm run be:start",
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "node-terminal",
+            "name": "Seed db",
+            "request": "launch",
+            "command": "npm run be:seed",
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}

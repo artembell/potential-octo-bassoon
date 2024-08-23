@@ -1,0 +1,42 @@
+services:
+  stripe-nginx:
+    container_name: stripe_nginx_container
+    # image: artembell/stripe-nginx
+    image: nginx:alpine
+    restart: always
+    volumes:
+      - ./nginx/public:/usr/share/nginx/html
+      - ./nginx/nginx1.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 80:80
+      - 443:443
+    # build:
+    #   context: ./nginx
+    #   dockerfile: ./nginx.Dockerfile
+
+  # stripe-caddy:
+  #   container_name: caddy_container
+  #   image: artembell/stripe-caddy
+  #   # image: caddy:alpine
+  #   restart: always
+  #   ports:
+  #     - 80:80
+  #     - 443:443
+  #   build:
+  #     context: ./
+  #     dockerfile: ./caddy/caddy.local.prod.Dockerfile
+  #   volumes:
+  #     - ./caddy/logs:/usr/share/caddy/logs
+  #     - ./caddy/data:/data/caddy
+  
+  
+
+networks:
+  backend-net:
+      
+volumes:
+  pgadmin_vol:
+  postgres_vol:
+  caddy_config:
+  mongo_vol1:
+  mongo_vol2:

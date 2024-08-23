@@ -1,0 +1,91 @@
+services:
+  stripe-caddy:
+    container_name: caddy_container
+    image: caddy:alpine
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    network_mode: "host"
+    volumes:
+      - ./caddy/old.Caddyfile:/etc/caddy/Caddyfile
+      - ./caddy/static:/code/static
+      - ./caddy/logs:/code/logs
+      - ./caddy/data:/data/caddy
+      # - caddy_config:/config
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq_container
+    # hostname: 'rabbitmq'
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+     - ./rabbitmq/data/:/var/lib/rabbitmq/mnesia/
+    #  - ./myrabbit.conf:/etc/rabbitmq/rabbitmq.config
+    restart: always
+       
+  # stripe-api:
+  #   image: nimbus/api
+  #   container_name: nimbus-api
+  #   ports:
+  #     - "3000:3000"
+  #   env_file:
+  #     - ./backend/api.env
+  #   build:
+  #     context: ./backend
+  #     dockerfile: build_api.Dockerfile
+
+  # stripe-frontend:
+  #   image: nimbus/frontend
+  #   container_name: nimbus_frontend_container
+  #   ports:
+  #     - "4000:4000"
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: build_frontend.Dockerfile    
+      
+  postgre:
+    image: postgres:16.3
+    container_name: postgre_container
+    restart: always
+    ports:
+      - 7001:5432
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    # env_file:
+    #   - ./.env.postgre.local
+    volumes:
+      # - ./data/postgre:/var/lib/postgresql/data
+      # - ./configs/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
+      - postgres_vol:/var/lib/postgresql/data
+    networks:
+      - backend-net
+    
+  pgadmin:
+    image: dpage/pgadmin4:8.9
+    container_name: postgre_gui_container
+    restart: always
+    ports:
+      - "7002:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@stripe.tech
+      PGADMIN_DEFAULT_PASSWORD: root
+    # env_file:`
+    volumes:
+      - ./backend/data/pgadmin:/var/lib/pgadmin
+      - pgadmin_vol:/var/lib/pgadmin
+    networks:
+      - backend-net
+
+networks:
+  backend-net:
+      
+volumes:
+  pgadmin_vol:
+  postgres_vol:
+  caddy_config:
+  mongo_vol1:
+  mongo_vol2:
