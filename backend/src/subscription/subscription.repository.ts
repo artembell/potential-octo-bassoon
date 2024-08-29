@@ -12,6 +12,14 @@ export class SubscriptionRepository {
         private readonly persistenceService: PersistenceService
     ) { }
 
+    async removeAll() {
+        try {
+            await this.persistenceService.subscription.deleteMany();
+        } catch (e: unknown) {
+            console.error(e);
+        }
+    }
+
     async findSubscriptionByPriceAndUser(priceId: number, userId: number) {
         try {
             const subscription = await this.persistenceService.subscription.findFirst({

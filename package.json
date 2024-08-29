@@ -7,17 +7,10 @@
         "be:start": "npm run be:start --prefix backend",
         "fe:start": "npm run fe:start --prefix frontend",
         "be:seed": "npm run be:seed --prefix backend",
-
         "be:prod": "npm run be:build:prod --prefix backend && npm run be:start:prod --prefix backend"
     },
     "author": "",
     "license": "ISC",
-    "dependencies": {
-        "amqp-connection-manager": "^4.1.14",
-        "amqplib": "^0.10.4",
-        "cookie-parser": "^1.4.6"
-    },
-    "devDependencies": {
-        "@types/cookie-parser": "^1.4.7"
-    }
+    "dependencies": {},
+    "devDependencies": {}
 }

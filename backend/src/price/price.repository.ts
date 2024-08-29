@@ -12,12 +12,28 @@ export class PriceRepository {
         private readonly persistenceService: PersistenceService
     ) { }
 
+    async removeAllProducts() {
+        try {
+            return await this.persistenceService.product.deleteMany();
+        } catch (e: unknown) {
+            console.error(e);
+        }
+    }
+
+    async removeAllPrices() {
+        try {
+            return await this.persistenceService.price.deleteMany();
+        } catch (e: unknown) {
+            console.error(e);
+        }
+    }
+
     async findPriceById(priceId: number) {
         try {
             const price = await this.persistenceService.price.findUnique({
                 where: {
                     id: priceId
-                }, 
+                },
                 include: {
                     product: true
                 }

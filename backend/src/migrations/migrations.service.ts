@@ -24,13 +24,13 @@ export class MigrationsService {
 
         await this.priceService.createPrice({
             amount: 10,
-            period: 'weekly',
+            period: 'week',
             productId: product1.id,
             title: 'Weekly'
         });
         await this.priceService.createPrice({
             amount: 13,
-            period: 'weekly',
+            period: 'week',
             productId: product2.id,
             title: 'Weekly'
         });
@@ -63,6 +63,8 @@ export class MigrationsService {
     }
 
     async clear() {
-        
+        await this.priceService.removeAll()
+        await this.userService.removeAll()
+        await this.subscriptionsService.removeAll()
     }
 }

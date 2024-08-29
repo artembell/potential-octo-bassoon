@@ -7,7 +7,6 @@ import { useSearchParams } from "react-router-dom";
 const stripePromise = loadStripe("pk_test_51PnyLPRpn18ZzZBouuSOaJ5d8OF3ZAZGCftLcb6nxipU83qeZ5pF5wkZ59ydxXiC2Xk2wmeuprgENzhNa7Me93Js00I0Ohj3TQ");
 
 export const PaymentInfoPage = () => {
-
     const [clientSecret, setClientSecret] = useState("");
     const [searchParams] = useSearchParams();
 

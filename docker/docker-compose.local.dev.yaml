@@ -52,11 +52,11 @@ services:
     restart: always
     ports:
       - 7001:5432
-    environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
-    # env_file:
-    #   - ./.env.postgre.local
+    # environment:
+    #   POSTGRES_USER: root
+    #   POSTGRES_PASSWORD: root
+    env_file:
+      - ./.env.postgre.dev
     volumes:
       # - ./data/postgre:/var/lib/postgresql/data
       # - ./configs/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
@@ -70,10 +70,11 @@ services:
     restart: always
     ports:
       - "7002:80"
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@stripe.tech
-      PGADMIN_DEFAULT_PASSWORD: root
-    # env_file:`
+    # environment:
+    #   PGADMIN_DEFAULT_EMAIL: admin@stripe.tech
+    #   PGADMIN_DEFAULT_PASSWORD: root
+    env_file:
+      - ./.env.postgre.dev
     volumes:
       - ./backend/data/pgadmin:/var/lib/pgadmin
       - pgadmin_vol:/var/lib/pgadmin
@@ -87,5 +88,3 @@ volumes:
   pgadmin_vol:
   postgres_vol:
   caddy_config:
-  mongo_vol1:
-  mongo_vol2:

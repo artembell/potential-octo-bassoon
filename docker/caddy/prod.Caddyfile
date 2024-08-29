@@ -1,0 +1,32 @@
+stripe.artembell.dev {
+	# route /api/health {
+	# 	uri strip_prefix /api
+	# 	reverse_proxy * 127.0.0.1:3000
+	# }
+
+	# route /api/docs/* {
+	# 	uri strip_prefix /api
+	# 	reverse_proxy * 127.0.0.1:3000
+	# }
+
+	# root * /code/static
+	# file_server
+
+	# route /api/stripe/webhook {
+	# 	reverse_proxy * localhost:3000/api/stripe/webhook
+	# }
+
+	route /api/* {
+		reverse_proxy * stripe-api:3000
+	}
+
+	route /* {
+		reverse_proxy * stripe-frontend:4000
+	}
+
+	log {
+		output file /code/logs/access.json
+		format json
+		level debug
+	}
+}

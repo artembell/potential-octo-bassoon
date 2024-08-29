@@ -4,8 +4,8 @@
     "version": "0.0.0",
     "type": "module",
     "scripts": {
-        "fe:start:prod": "dotenv -e ./.env.prod vite",
-        "fe:start": "dotenv -e ./.env.local vite",
+        "fe:start:prod": "dotenv -e ./.env.prod -- vite --host 0.0.0.0",
+        "fe:start": "dotenv -e ./.env.dev -- vite",
         "dev": "vite",
         "fe:build": "tsc -b && vite build",
         "lint": "eslint .",

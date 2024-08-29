@@ -11,6 +11,15 @@ export class UserRepository {
         private readonly persistenceService: PersistenceService
     ) { }
 
+
+    async removeAll() {
+        try {
+            await this.persistenceService.user.deleteMany();
+        } catch (e: unknown) {
+            console.error(e);
+        }
+    }
+
     async setMetadata(userId: number, metadata: any) {
         try {
             const user = await this.persistenceService.user.update({

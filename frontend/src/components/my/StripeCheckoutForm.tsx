@@ -6,6 +6,7 @@ import {
 import { useEffect, useState } from "react";
 
 export default function CheckoutForm() {
+    console.log({ domain: import.meta.env.VITE_DOMAIN });
     const stripe = useStripe();
     const elements = useElements();
 
@@ -60,7 +61,7 @@ export default function CheckoutForm() {
             elements,
             confirmParams: {
                 // Make sure to change this to your payment completion page
-                return_url: `${process.env.DOMAIN}/payment-info`,
+                return_url: `${import.meta.env.VITE_DOMAIN}/payment-info`,
             },
         });
 

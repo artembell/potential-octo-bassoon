@@ -8,6 +8,14 @@ export class UserService {
         private readonly userRepo: UserRepository
     ) { }
 
+    async removeAll() {
+        try {
+            await this.userRepo.removeAll();
+        } catch (e: unknown) {
+            console.error(e);
+        }
+    }
+
     async updateMetadata(userId: number, metadata: any) {
         try {
             const user = await this.userRepo.setMetadata(userId, metadata);

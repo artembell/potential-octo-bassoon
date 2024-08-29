@@ -8,6 +8,8 @@
     "scripts": {
         "be:build:prod": "dotenv -e ./.env.prod -- nest build",
         "be:start:prod": "dotenv -e ./.env.prod -- node dist/main",
+        "be:migrate:prod": "dotenv -e ./.env.prod -- prisma migrate dev",
+        "be:generate:prod": "dotenv -e ./.env.prod -- prisma generate",
         "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
         "start": "nest start",
         "be:start": "dotenv -e ./.env.dev -- nest start --watch",
@@ -32,7 +34,10 @@
         "reflect-metadata": "^0.2.0",
         "rxjs": "^7.8.1",
         "stripe": "^16.7.0",
-        "ts-node": "^10.9.2"
+        "ts-node": "^10.9.2",
+        "amqp-connection-manager": "^4.1.14",
+        "amqplib": "^0.10.4",
+        "cookie-parser": "^1.4.6"
     },
     "devDependencies": {
         "@nestjs/cli": "^10.0.0",
@@ -56,7 +61,8 @@
         "ts-loader": "^9.4.3",
         "ts-node": "^10.9.1",
         "tsconfig-paths": "^4.2.0",
-        "typescript": "^5.1.3"
+        "typescript": "^5.1.3",
+        "@types/cookie-parser": "^1.4.7"
     },
     "jest": {
         "moduleFileExtensions": [

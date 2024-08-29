@@ -10,6 +10,15 @@ export class PriceService {
         private readonly stripeService: StripeService
     ) { }
 
+    async removeAll() {
+        try {
+            await this.priceRepo.removeAllPrices()
+            return await this.priceRepo.removeAllProducts()
+        } catch (e: unknown) {
+            console.error(e)
+        }
+    }
+
     async findPriceById(priceId: number) {
         try {
             const price = await this.priceRepo.findPriceById(priceId);

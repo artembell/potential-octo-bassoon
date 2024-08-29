@@ -27,6 +27,14 @@ export class SubscriptionService {
     ) { }
 
 
+    async removeAll() {
+        try {
+            await this.subscriptionRepo.removeAll();
+        } catch (e: unknown) {
+            console.error(e);
+        }
+    }
+
     async getCustomerInvoices({
         customerId
     }: {

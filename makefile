@@ -22,4 +22,27 @@ be:
 
 seed:
 	npm run be:seed --prefix backend
-	
+
+prod-db:
+	docker compose --file ./docker/docker-compose.local.prod.yaml down --volumes db db-admin
+	docker compose --file ./docker/docker-compose.local.prod.yaml up --detach --build --force-recreate db db-admin
+
+prod-rabbit:
+	docker compose --file ./docker/docker-compose.local.prod.yaml down --volumes rabbitmq
+	docker compose --file ./docker/docker-compose.local.prod.yaml up --detach --build --force-recreate rabbitmq
+
+prod-be:	
+	docker compose --file ./docker/docker-compose.local.prod.yaml down --volumes stripe-api
+	docker compose --file ./docker/docker-compose.local.prod.yaml up --detach --build --force-recreate stripe-api
+
+prod-fe:	
+	docker compose --file ./docker/docker-compose.local.prod.yaml down --volumes stripe-frontend
+	docker compose --file ./docker/docker-compose.local.prod.yaml up --detach --build --force-recreate stripe-frontend
+
+prod-caddy:	
+	docker compose --file ./docker/docker-compose.local.prod.yaml down --volumes stripe-caddy
+	docker compose --file ./docker/docker-compose.local.prod.yaml up --detach --build --force-recreate stripe-caddy
+
+prod-all:
+	docker compose --file ./docker/docker-compose.local.prod.yaml down --volumes db db-admin rabbitmq stripe-frontend stripe-caddy
+	docker compose --file ./docker/docker-compose.local.prod.yaml up --detach --build --force-recreate  db db-admin rabbitmq stripe-frontend stripe-caddy
