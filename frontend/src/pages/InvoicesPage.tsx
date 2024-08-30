@@ -5,7 +5,7 @@ export const InvoicesPage = () => {
     const [invoices, setInvoices] = useState<any[]>([]);
 
     useEffect(() => {
-        fetch('/api/invoices')
+        fetch('/api/invoices:')
             .then((response) => response.json())
             .then(invoices => {
                 console.log(invoices.upcomingInvoice);

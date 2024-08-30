@@ -2,10 +2,13 @@
 CREATE TYPE "Currency" AS ENUM ('usd');
 
 -- CreateEnum
+CREATE TYPE "SubscriptionStatus" AS ENUM ('not_active', 'active', 'suspended', 'cancelled');
+
+-- CreateEnum
 CREATE TYPE "PricePeriod" AS ENUM ('week', 'month', 'year');
 
 -- CreateEnum
-CREATE TYPE "InvoiceStatus" AS ENUM ('paid', 'not_paid');
+CREATE TYPE "InvoicePaidStatus" AS ENUM ('pending', 'paid', 'failed');
 
 -- CreateTable
 CREATE TABLE "User" (
@@ -42,6 +45,7 @@ CREATE TABLE "Price" (
 CREATE TABLE "Subscription" (
     "id" SERIAL NOT NULL,
     "userId" INTEGER NOT NULL,
+    "status" "SubscriptionStatus" NOT NULL DEFAULT 'not_active',
     "priceId" INTEGER NOT NULL,
     "metadata" JSONB NOT NULL,
 
@@ -54,6 +58,7 @@ CREATE TABLE "SubscriptionPart" (
     "description" VARCHAR(200) NOT NULL,
     "startDate" TIMESTAMP(3) NOT NULL,
     "endDate" TIMESTAMP(3),
+    "subscriptionId" INTEGER NOT NULL,
     "metadata" JSONB NOT NULL,
 
     CONSTRAINT "SubscriptionPart_pkey" PRIMARY KEY ("id")
@@ -62,8 +67,12 @@ CREATE TABLE "SubscriptionPart" (
 -- CreateTable
 CREATE TABLE "Invoice" (
     "id" SERIAL NOT NULL,
-    "status" "InvoiceStatus" NOT NULL DEFAULT 'paid',
-    "subscriptionPartId" INTEGER NOT NULL,
+    "subscriptionId" INTEGER NOT NULL,
+    "paidStatus" "InvoicePaidStatus" NOT NULL DEFAULT 'pending',
+    "createdDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "amount" INTEGER NOT NULL,
+    "invoicePdf" TEXT,
     "metadata" JSONB NOT NULL,
 
     CONSTRAINT "Invoice_pkey" PRIMARY KEY ("id")
@@ -82,4 +91,7 @@ ALTER TABLE "Subscription" ADD CONSTRAINT "Subscription_userId_fkey" FOREIGN KEY
 ALTER TABLE "Subscription" ADD CONSTRAINT "Subscription_priceId_fkey" FOREIGN KEY ("priceId") REFERENCES "Price"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Invoice" ADD CONSTRAINT "Invoice_subscriptionPartId_fkey" FOREIGN KEY ("subscriptionPartId") REFERENCES "SubscriptionPart"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "SubscriptionPart" ADD CONSTRAINT "SubscriptionPart_subscriptionId_fkey" FOREIGN KEY ("subscriptionId") REFERENCES "Subscription"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Invoice" ADD CONSTRAINT "Invoice_subscriptionId_fkey" FOREIGN KEY ("subscriptionId") REFERENCES "Subscription"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

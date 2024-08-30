@@ -14,11 +14,24 @@ migrate:
 generate:
 	npm run be:generate --prefix backend
 
-fe:
+dev-fe:
 	npm run fe:start
 
-be:
+dev-be:
 	npm run be:start
+
+dev-db:
+	docker compose --file ./docker/docker-compose.local.dev.yaml down --volumes postgre pgadmin rabbitmq
+	docker compose --file ./docker/docker-compose.local.dev.yaml up --detach --build --force-recreate postgre pgadmin rabbitmq
+
+dev-caddy:	
+	docker compose --file ./docker/docker-compose.local.dev.yaml down stripe-caddy
+	docker compose --file ./docker/docker-compose.local.dev.yaml up --detach --build --force-recreate stripe-caddy
+
+
+
+
+
 
 seed:
 	npm run be:seed --prefix backend
@@ -33,7 +46,7 @@ prod-rabbit:
 
 prod-be:	
 	docker compose --file ./docker/docker-compose.local.prod.yaml down --volumes stripe-api
-	docker compose --file ./docker/docker-compose.local.prod.yaml up --detach --build --force-recreate stripe-api
+	docker compose --file ./docker/docker-compose.local.prod.yaml up --detach --build stripe-api
 
 prod-fe:	
 	docker compose --file ./docker/docker-compose.local.prod.yaml down --volumes stripe-frontend

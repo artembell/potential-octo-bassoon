@@ -69,12 +69,12 @@ services:
     # env_file:
     #   - ./.env.postgre.prod
     volumes:
-      - ./postgre/my-postgres.conf:/etc/postgresql.conf
+      # - ./docker/postgre/my-postgres.conf:/etc/postyyy/postgresql.conf
       - postgres_vol:/var/lib/postgresql/data
       # - ./data/postgre:/var/lib/postgresql/data
       # - ./postgre/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
       # - ./postgre/config.conf:/etc/postgresql.conf
-    command: postgres -c config_file=/etc/postgresql.conf
+    # command: -c config_file=/etc/postyyy/postgresql.conf
     networks:
       - backend
    
@@ -109,18 +109,24 @@ services:
 
   stripe-caddy:
     container_name: caddy_container
-    image: caddy:alpine
+    image: caddy-custom-image
+    # image: caddy:alpine
     restart: always
     ports:
       - 80:80
       - 443:443
+      - "443:443/udp"
     # network_mode: "host"
     volumes:
-      - ./caddy/prod.Caddyfile:/etc/caddy/Caddyfile
+      # - ./caddy/prod.Caddyfile:/etc/caddy/Caddyfile
       - ./caddy/static:/code/static
       - ./caddy/logs:/code/logs
       - ./caddy/data:/data/caddy
+    build:
+      context: ../
+      dockerfile: ./docker/caddy.prod.Dockerfile
       # - caddy_config:/config
+    # command: caddy run --config /etc/caddy/prod.Caddyfile --adapter caddyfile
     networks:
       - backend
 

@@ -13,6 +13,7 @@ import { LoginPage } from './pages/LoginPage';
 import { LogoutPage } from './pages/LogoutPage';
 import { PaymentInfoPage } from './pages/PaymentInfoPage';
 import { SubscriptionsPage } from './pages/SubsciptionsPage';
+import { SubscriptionPaymentsPage } from './pages/SubscriptionPaymentsPage';
 
 function App() {
     return (
@@ -37,8 +38,8 @@ function App() {
                     <Route path="/inspect/:priceId" element={<InspectProductPage />}></Route>
                     <Route path="/checkout/:priceId" element={<CheckoutPage />}></Route>
                     <Route path="/subscriptions" element={<SubscriptionsPage />}></Route>
+                    <Route path="/subscription/:subscriptionId" element={<SubscriptionPaymentsPage />}></Route>
                     <Route path="/invoices" element={<InvoicesPage />}></Route>
-
                     <Route path="/payment-info" element={<PaymentInfoPage />}></Route>
                     <Route path="/login" element={<LoginPage />}></Route>
                     <Route path="/logout" element={<LogoutPage />}></Route>

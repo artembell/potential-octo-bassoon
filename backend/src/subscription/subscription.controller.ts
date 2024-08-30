@@ -90,21 +90,52 @@ export class SubscriptionController {
         }
     }
 
+    @Get('/invoices/:subscriptionId')
+    async getSubscriptionInvoices(
+        @Param() params: any,
+        @Cookies(APP_USER_ID_COOKIE) userId: string
+    ) {
+        try {
+            const { subscriptionId } = params;
+            const subId = parseInt(subscriptionId);
+
+            const invoices = await this.subsciptionService.getSubscriptionWithInvoices({
+                subId
+            });
+
+            return {
+                data: invoices,
+            };
+        } catch (e: unknown) {
+            console.error(e);
+        }
+    }
+
     @Get('/subscriptions')
     async getAllSubscriptions(
         @Res() response: Response,
         @Cookies(APP_USER_ID_COOKIE) userId: string
     ) {
         try {
+            console.log(`User id from cookie '${APP_USER_ID_COOKIE}': ${userId}`);
             const { stripeSubs, subs } = await this.subsciptionService.getAllSubscriptions({
                 userId: parseInt(userId)
             });
 
-            return {
+            console.log(`Return answer:`);
+            console.log(JSON.stringify(subs, null, 4));
+
+            // return {
+            //     message: 'ok',
+            //     data: stripeSubs.data,
+            //     other: subs
+            // };
+
+            return response.status(200).send({
                 message: 'ok',
                 data: stripeSubs.data,
                 other: subs
-            };
+            });
         } catch (e: unknown) {
             return response.status(400).send({ error: { message: "Wrong." } });
         }
@@ -122,18 +153,18 @@ export class SubscriptionController {
     ) {
         try {
             const { subscriptionId } = params;
-            const subscriptions = await this.subsciptionService.cancelSubscription({
-                subscriptionId: parseInt(subscriptionId)
-            });
+            const subId = parseInt(subscriptionId);
+
+            const subscriptions = await this.subsciptionService.cancelSubscription({ subscriptionId: subId });
 
             const { stripeSubs, subs } = await this.subsciptionService.getAllSubscriptions({
                 userId: parseInt(userId)
             });
 
-            return {
+            return response.status(200).send({
                 message: 'ok',
                 data: subs
-            };
+            });
         } catch (e: unknown) {
             return response.status(400).send({ error: { message: "Wrong." } });
         }
@@ -160,10 +191,10 @@ export class SubscriptionController {
                 userId: parseInt(userId)
             });
 
-            return {
+            return response.status(200).send({
                 message: 'ok',
                 data: subs
-            };
+            });
         } catch (e: unknown) {
             return response.status(400).send({ error: { message: "Wrong." } });
         }
@@ -191,10 +222,10 @@ export class SubscriptionController {
                 userId: parseInt(userId)
             });
 
-            return {
+            return response.status(200).send({
                 message: 'ok',
                 data: subs
-            };
+            });
         } catch (e: unknown) {
             return response.status(400).send({ error: { message: "Wrong." } });
         }

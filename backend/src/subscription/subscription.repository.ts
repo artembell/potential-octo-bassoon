@@ -73,7 +73,12 @@ export class SubscriptionRepository {
                 },
                 include: {
                     subscriptionParts: true,
-                    price: true
+                    price: {
+                        include: {
+                            product: true
+                        }
+                    },
+                    invoices: true,
                 }
             });
 

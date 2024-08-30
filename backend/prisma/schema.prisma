@@ -47,6 +47,7 @@ model Subscription {
     price             Price              @relation(name: "SubscriptionPrice", fields: [priceId], references: [id])
     priceId           Int
     subscriptionParts SubscriptionPart[] @relation(name: "PartOfSubscription")
+    invoices          Invoice[]          @relation(name: "InvoiceSubscription")
     metadata          Json
 }
 
@@ -71,4 +72,22 @@ enum PricePeriod {
     week
     month
     year
+}
+
+model Invoice {
+    id             Int               @id @default(autoincrement())
+    subscription   Subscription      @relation(name: "InvoiceSubscription", fields: [subscriptionId], references: [id])
+    subscriptionId Int
+    paidStatus     InvoicePaidStatus @default(pending)
+    createdDate    DateTime          @default(now())
+    updatedDate    DateTime          @default(now())
+    amount         Int
+    invoicePdf     String?
+    metadata       Json
+}
+
+enum InvoicePaidStatus {
+    pending
+    paid
+    failed
 }

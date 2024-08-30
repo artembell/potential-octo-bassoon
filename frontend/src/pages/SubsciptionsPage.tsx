@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
 import { Button } from "../components/ui/button";
 import { Price } from "../components/my/Price";
 import { Badge } from "@/components/ui/badge";
+import { Link } from "react-router-dom";
 
 export const SubscriptionsPage = () => {
     const [subscriptions, setSubscriptions] = useState<any[]>([]);
@@ -12,6 +13,7 @@ export const SubscriptionsPage = () => {
             .then((response) => response.json())
             .then(response => {
 
+                console.log(response);
                 setSubscriptions(response.other);
             });
     }, []);
@@ -94,6 +96,7 @@ export const SubscriptionsPage = () => {
                         >
                             <CardHeader>
                                 <CardTitle className="flex flex-row gap-3">
+                                    
                                     <div>
                                         {sub.price.product.title} subscription
                                     </div>
@@ -103,6 +106,9 @@ export const SubscriptionsPage = () => {
                                 </CardTitle>
                                 {/* <CardDescription></CardDescription> */}
                                 <CardContent>
+                                    <div>
+                                        <Link to={`/subscription/${sub.id}`}>{'Payments ---->'}</Link>
+                                    </div>
                                     <div>
                                         <div>Start: {date}</div>
                                         <div>End: {endDate}</div>

@@ -5,6 +5,7 @@ import { StripeService } from 'src/stripe/stripe.service';
 import { UserService } from 'src/user/user.service';
 import Stripe from 'stripe';
 import { SubscriptionRepository } from './subscription.repository';
+import { InvoiceService } from 'src/invoice/invoice.service';
 
 type TSubscriptionServiceCreateSubscription = {
     userId: number;
@@ -22,6 +23,7 @@ export class SubscriptionService {
     constructor(
         private readonly subscriptionRepo: SubscriptionRepository,
         private readonly priceService: PriceService,
+        private readonly invoiceService: InvoiceService,
         private readonly userService: UserService,
         private readonly stripeService: StripeService
     ) { }
@@ -137,6 +139,52 @@ export class SubscriptionService {
         }
     }
 
+    async getSubscriptionInvoices({
+        subId
+    }: {
+        subId: number;
+    }) {
+        try {
+            const invoices = await this.invoiceService.getInvoicesOfSubscription({
+                subId
+            });
+
+            return invoices;
+        } catch (e: unknown) {
+            console.error(e);
+        }
+    }
+
+    async getSubscriptionWithInvoices({
+        subId
+    }: {
+        subId: number;
+    }) {
+        try {
+            const invoices = await this.getSubscriptionById({
+                subId
+            });
+
+            return invoices;
+        } catch (e: unknown) {
+            console.error(e);
+        }
+    }
+
+    async getSubscriptionById({
+        subId
+    }: {
+        subId: number;
+    }) {
+        try {
+            const subscriptions = await this.subscriptionRepo.findSubscriptionById(subId);
+
+            return subscriptions;
+        } catch (e: unknown) {
+            console.error(e);
+        }
+    }
+
     async getAllSubscriptions({
         userId
     }: {
@@ -146,11 +194,17 @@ export class SubscriptionService {
             const userSaved = await this.userService.findUserById(userId);
             const stripeUserId = userSaved.metadata['stripeId'];
 
+            console.log(`stripeUserId: ${stripeUserId}`);
+
             const subs = await this.subscriptionRepo.getAllSubscriptions({
                 userId
             });
 
+            console.log(`Total db subs: ${subs.length}`);
+
             const stripeSubs = await this.stripeService.getAllSubscriptions({ userId: stripeUserId });
+
+            console.log(`Return stripe subs: ${stripeSubs.data.length}`);
 
             return {
                 stripeSubs, subs
@@ -166,7 +220,6 @@ export class SubscriptionService {
         subscriptionId: number;
     }) {
         try {
-
             const subscription = await this.subscriptionRepo.findSubscriptionById(subscriptionId);
             const stripeSubscriptionId = subscription.metadata['stripeId'];
 

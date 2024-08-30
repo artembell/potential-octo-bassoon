@@ -105,6 +105,20 @@ export class StripeService {
         }
     }
 
+    async getInvoice({
+        invoiceId
+    }: {
+        invoiceId: string;
+    }) {
+        try {
+            const invoice = await this.stripeClient.invoices.retrieve(invoiceId);
+
+            return invoice;
+        } catch (e: unknown) {
+            console.error(e);
+        }
+    }
+
     async confirm(customerId: string, p: Stripe.PaymentIntent) {
         try {
             /** Get customer payment methods */
@@ -338,6 +352,7 @@ export class StripeService {
     }
 
     handleEvent(event: Stripe.Event) {
+        console.log(event);
         switch (event.type) {
             case 'customer.created':
             case 'customer.deleted':
