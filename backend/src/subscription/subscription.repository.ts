@@ -14,6 +14,8 @@ export class SubscriptionRepository {
 
     async removeAll() {
         try {
+            await this.persistenceService.invoice.deleteMany();
+            await this.persistenceService.subscriptionPart.deleteMany();
             await this.persistenceService.subscription.deleteMany();
         } catch (e: unknown) {
             console.error(e);
@@ -75,10 +77,15 @@ export class SubscriptionRepository {
                     subscriptionParts: true,
                     price: {
                         include: {
-                            product: true
+                            product: {
+                                include: {
+                                    content: true
+                                }
+                            }
                         }
                     },
                     invoices: true,
+                    user: true
                 }
             });
 

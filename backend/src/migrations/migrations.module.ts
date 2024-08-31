@@ -4,12 +4,14 @@ import { SubscriptionModule } from 'src/subscription/subscription.module';
 import { UserModule } from 'src/user/user.module';
 import { MigrationsService } from './migrations.service';
 import { MigrationsController } from './migrations.controller';
+import { ContentModule } from 'src/content/content.module';
 
 @Module({
     imports: [
         UserModule,
         PriceModule,
-        SubscriptionModule
+        SubscriptionModule,
+        ContentModule
     ],
     providers: [MigrationsService],
     exports: [MigrationsService],

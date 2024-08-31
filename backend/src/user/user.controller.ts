@@ -44,6 +44,7 @@ export class UserController {
                 throw new Error('Bad email');
             }
 
+            console.log(`- register`);
             const userSaved = await this.userService.createUserIfNotExists(email);
             const userStripe =
                 await this.stripeService.createCustomerIfNotExists(email, { userId: userSaved.id });

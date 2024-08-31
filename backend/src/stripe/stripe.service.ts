@@ -105,12 +105,14 @@ export class StripeService {
         }
     }
 
-    async getInvoice({
+    async updateAndGetInvoice({
         invoiceId
     }: {
         invoiceId: string;
     }) {
         try {
+            // const withMetadata = await this.stripeClient.invoices.({})
+
             const invoice = await this.stripeClient.invoices.retrieve(invoiceId);
 
             return invoice;
@@ -352,7 +354,7 @@ export class StripeService {
     }
 
     handleEvent(event: Stripe.Event) {
-        console.log(event);
+        console.log(event.type);
         switch (event.type) {
             case 'customer.created':
             case 'customer.deleted':
@@ -366,6 +368,7 @@ export class StripeService {
                 this.broker.emit(PAYMENT_EVENTS_PATTERN, event);
                 break;
             }
+            case "invoice.payment_succeeded":
             case "customer.subscription.updated":
             case "customer.subscription.created": {
                 this.broker.emit(SUBSCRIPTION_EVENTS_PATTERN, event);
@@ -374,7 +377,6 @@ export class StripeService {
             case "invoice.upcoming":
             case "invoice.updated":
             case "invoice.paid":
-            case "invoice.payment_succeeded":
             case "invoice.finalized":
             case "invoice.created": {
                 this.broker.emit(INVOICE_EVENTS_PATTERN, event);

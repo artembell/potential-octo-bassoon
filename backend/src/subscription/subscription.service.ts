@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { SubscriptionStatus } from '@prisma/client';
 import { PriceService } from 'src/price/price.service';
 import { StripeService } from 'src/stripe/stripe.service';
@@ -6,6 +6,7 @@ import { UserService } from 'src/user/user.service';
 import Stripe from 'stripe';
 import { SubscriptionRepository } from './subscription.repository';
 import { InvoiceService } from 'src/invoice/invoice.service';
+import { ContentService } from 'src/content/content.service';
 
 type TSubscriptionServiceCreateSubscription = {
     userId: number;
@@ -23,11 +24,36 @@ export class SubscriptionService {
     constructor(
         private readonly subscriptionRepo: SubscriptionRepository,
         private readonly priceService: PriceService,
+
+        // @Inject(forwardRef(() => SubscriptionService))
         private readonly invoiceService: InvoiceService,
+
         private readonly userService: UserService,
-        private readonly stripeService: StripeService
+        private readonly stripeService: StripeService,
+        private readonly contentService: ContentService
     ) { }
 
+    async activateAccess({
+        subId
+    }: {
+        subId: number;
+    }) {
+        try {
+            const subscription = await this.subscriptionRepo.findSubscriptionById(subId);
+            const userId = subscription.user.id;
+            const contentId = subscription.price.product.content.id;
+
+            /** Give user access to content  */
+            const result = await this.contentService.grantAccess({
+                contentId,
+                userId
+            });
+
+            return result;
+        } catch (e: unknown) {
+            console.error(e);
+        }
+    }
 
     async removeAll() {
         try {
@@ -64,6 +90,7 @@ export class SubscriptionService {
         userId,
     }: TSubscriptionServiceSubscribe) {
         try {
+            console.log(`- create subscription.`);
             const customer = await this.userService.findUserById(userId);
             if (customer === null) {
                 throw new Error(`No user with id ${userId}`);
@@ -194,17 +221,11 @@ export class SubscriptionService {
             const userSaved = await this.userService.findUserById(userId);
             const stripeUserId = userSaved.metadata['stripeId'];
 
-            console.log(`stripeUserId: ${stripeUserId}`);
-
             const subs = await this.subscriptionRepo.getAllSubscriptions({
                 userId
             });
 
-            console.log(`Total db subs: ${subs.length}`);
-
             const stripeSubs = await this.stripeService.getAllSubscriptions({ userId: stripeUserId });
-
-            console.log(`Return stripe subs: ${stripeSubs.data.length}`);
 
             return {
                 stripeSubs, subs
@@ -395,6 +416,38 @@ export class SubscriptionService {
         }
     }
 
+
+    private async handleInvoicePaymentSucceededEvent(event: Stripe.InvoicePaymentSucceededEvent) {
+        try {
+            // set subscription active
+            // set access to courses
+            const data = event.data.object;
+            const stripeInvoiceId = data.id;
+            const lines = data.lines;
+
+            /** Find subscription that invoice belongs to */
+            let subscription: Stripe.Subscription;
+            for (const item of lines.data) {
+                if (item.type === 'subscription') {
+                    subscription = item as unknown as Stripe.Subscription;
+                }
+            }
+
+            /** If this invoice doesnt belong to any subscription */
+            if (subscription === undefined) {
+                console.error(`No subscription associated found to this invoice.`);
+                return;
+            }
+
+            const subId = parseInt(subscription.metadata['subscriptionId']);
+            const result = this.activateAccess({
+                subId
+            });
+        } catch (e: unknown) {
+            console.error(e);
+        }
+    }
+
     async handleEvent(event: Stripe.Event) {
         try {
             switch (event.type) {
@@ -428,7 +481,11 @@ export class SubscriptionService {
                         },
                         status: status === 'active' ? 'active' : undefined
                     });
-                    console.log(upd);
+                    break;
+                }
+                case 'invoice.payment_succeeded': {
+                    await this.handleInvoicePaymentSucceededEvent(event);
+                    break;
                 }
                 case 'customer.subscription.deleted': {
                     const data = event.data.object;

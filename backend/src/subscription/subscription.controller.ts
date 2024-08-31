@@ -117,19 +117,9 @@ export class SubscriptionController {
         @Cookies(APP_USER_ID_COOKIE) userId: string
     ) {
         try {
-            console.log(`User id from cookie '${APP_USER_ID_COOKIE}': ${userId}`);
             const { stripeSubs, subs } = await this.subsciptionService.getAllSubscriptions({
                 userId: parseInt(userId)
             });
-
-            console.log(`Return answer:`);
-            console.log(JSON.stringify(subs, null, 4));
-
-            // return {
-            //     message: 'ok',
-            //     data: stripeSubs.data,
-            //     other: subs
-            // };
 
             return response.status(200).send({
                 message: 'ok',

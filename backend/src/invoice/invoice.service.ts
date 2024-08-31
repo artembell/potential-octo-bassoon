@@ -1,15 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InvoiceRepository } from './invoice.repository';
 import Stripe from 'stripe';
 import { StripeService } from 'src/stripe/stripe.service';
 import { InvoicePaidStatus } from '@prisma/client';
+import { SubscriptionService } from 'src/subscription/subscription.service';
 
 @Injectable()
 export class InvoiceService {
 
     constructor(
         private readonly invoiceRepo: InvoiceRepository,
-        private readonly stripeService: StripeService
+        private readonly stripeService: StripeService,
+        // @Inject(forwardRef(() => SubscriptionService))
     ) { }
 
     async getInvoicesOfSubscription({
@@ -61,7 +63,9 @@ export class InvoiceService {
                 }
             });
 
-            const stripeInvoice = await this.stripeService.getInvoice({ invoiceId: stripeInvoiceId });
+            const stripeInvoice = await this.stripeService.updateAndGetInvoice({
+                invoiceId: stripeInvoiceId
+            });
 
             return { stripeInvoice, invoice };
         } catch (e: unknown) {
@@ -79,7 +83,7 @@ export class InvoiceService {
             const createdDate = new Date(data.created * 1000);
             const status = data.status;
             const amountDue = data.amount_due;
-            const link = data.hosted_invoice_url
+            const link = data.hosted_invoice_url;
 
             /** We dont set `failed` status here */
             let invoiceStatus: InvoicePaidStatus;
@@ -128,17 +132,17 @@ export class InvoiceService {
         }
     }
 
+
     async handleEvent(event: Stripe.Event) {
         switch (event.type) {
             case 'invoice.created': {
                 await this.handleInvoiceCreatedEvent(event);
                 break;
             }
-            case 'invoice.finalized': {
-                const data = event.data.object;
-
-                break;
-            }
+            // case 'invoice.payment_succeeded': {
+            //     await this.handleInvoicePaymentSucceededEvent(event);
+            //     break;
+            // }
             default: {
                 break;
             }
