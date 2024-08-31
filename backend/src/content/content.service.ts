@@ -10,15 +10,18 @@ export class ContentService {
 
     async grantAccess({
         contentId,
-        userId
+        userId,
+        endDate
     }: {
         contentId: number;
         userId: number;
+        endDate?: Date;
     }) {
         try {
             const result = await this.contentRepo.grantAccess({
                 contentId,
-                userId
+                userId,
+                endDate
             });
 
             return result;
@@ -26,15 +29,21 @@ export class ContentService {
             console.error(e);
         }
     }
+    
     async removeAccess({
-        contendId,
+        contentId,
         userId
     }: {
-        contendId: number;
+        contentId: number;
         userId: number;
     }) {
         try {
-            // const result = await this.
+            const result = await this.contentRepo.removeAccess({
+                contentId,
+                userId
+            });
+
+            return result;
         } catch (e: unknown) {
             console.error(e);
         }

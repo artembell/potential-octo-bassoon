@@ -33,10 +33,11 @@ model Content {
 }
 
 model UserOnContent {
-    user      User    @relation(fields: [userId], references: [id])
+    user      User      @relation(fields: [userId], references: [id])
     userId    Int
-    content   Content @relation(fields: [contentId], references: [id])
+    content   Content   @relation(fields: [contentId], references: [id])
     contentId Int
+    endDate   DateTime?
 
     @@id([contentId, userId])
 }

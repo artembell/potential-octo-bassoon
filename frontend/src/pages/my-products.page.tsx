@@ -49,19 +49,19 @@ export function MyProductsPage() {
                     <Product
                         key={product.id}
                         product={product}
-                        // renderPrice={(price) => {
-                        //     return (
-                        //         <Card key={cnt.id} className="my-[10px]">
-                        //             <CardHeader>
-                        //                 <CardTitle>{cnt.data}</CardTitle>
-                        //                 {/* <CardDescription>Access to .</CardDescription> */}
-                        //             </CardHeader>
-                        //             {/* <CardContent className="flex flex-row gap-3">
-                        //                                  <div>{cnt.data}</div>
-                        //                              </CardContent> */}
-                        //         </Card>
-                        //     );
-                        // }}
+                    // renderPrice={(price) => {
+                    //     return (
+                    //         <Card key={cnt.id} className="my-[10px]">
+                    //             <CardHeader>
+                    //                 <CardTitle>{cnt.data}</CardTitle>
+                    //                 {/* <CardDescription>Access to .</CardDescription> */}
+                    //             </CardHeader>
+                    //             {/* <CardContent className="flex flex-row gap-3">
+                    //                                  <div>{cnt.data}</div>
+                    //                              </CardContent> */}
+                    //         </Card>
+                    //     );
+                    // }}
                     />
                 );
             })

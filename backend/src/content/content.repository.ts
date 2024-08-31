@@ -9,29 +9,28 @@ export class ContentRepository {
 
     async grantAccess({
         contentId,
-        userId
+        userId,
+        endDate
     }: {
         contentId: number;
         userId: number;
+        endDate?: Date;
     }) {
         try {
             const result = await this.persistenceService.userOnContent.create({
                 data: {
-                    contentId,
-                    userId
+                    content: {
+                        connect: {
+                            id: contentId
+                        }
+                    },
+                    user: {
+                        connect: {
+                            id: userId
+                        }
+                    },
+                    endDate: !endDate ? null : endDate
                 }
-                // data: {
-                //     users: {
-                //         connect: [
-                //             {
-                //                 contentId_userId: {
-                //                     contentId,
-                //                     userId
-                //                 }
-                //             }
-                //         ]
-                //     }
-                // }
             });
 
             return result;
@@ -40,14 +39,23 @@ export class ContentRepository {
         }
     }
     async removeAccess({
-        contendId,
+        contentId,
         userId
     }: {
-        contendId: number;
+        contentId: number;
         userId: number;
     }) {
         try {
-            // const result = await this.
+            const result = await this.persistenceService.userOnContent.delete({
+                where: {
+                    contentId_userId: {
+                        contentId,
+                        userId
+                    }
+                }
+            });
+
+            return result;
         } catch (e: unknown) {
             console.error(e);
         }
@@ -85,39 +93,62 @@ export class ContentRepository {
         userId: number;
     }) {
         try {
-            // const content = await this.persistenceService.content.findMany({
+            // const products = await this.persistenceService.product.findMany({
             //     where: {
-            //         users: {
-            //             some: {
-            //                 user: {
-            //                     id: userId
+            //         content: {
+            //             users: {
+            //                 some: {
+            //                     user: {
+            //                         id: userId
+            //                     },
             //                 }
             //             }
-            //         }
+            //         },
             //     },
             //     include: {
-            //         product: true
+            //         content: true
             //     }
             // });
 
-            const products = await this.persistenceService.product.findMany({
+            const products = await this.persistenceService.userOnContent.findMany({
                 where: {
+                    user: {
+                        id: userId
+                    },
+                    // OR: [
+                    //     {
+                    //         endDate: {
+                    //             lte: new Date(),
+                    //         },
+                    //     },
+                    //     {
+                    //         endDate: {
+                    //             equals: null
+                    //         }
+                    //     }
+                    // ]
+                },
+                include: {
+                // select: {
                     content: {
-                        users: {
-                            some: {
-                                user: {
-                                    id: userId
+                        select: {
+                            product: {
+                                include: {
+                                    content: true
                                 }
                             }
                         }
                     }
-                },
-                include: {
-                    content: true
                 }
             });
 
-            return products;
+            // return products
+            return products.filter(cnt => {
+                if (cnt.endDate > new Date()) {
+                    return true
+                }
+                return false
+            }).map((cnt) => cnt.content.product);
         } catch (e: unknown) {
             console.error(e);
         }

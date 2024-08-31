@@ -252,6 +252,19 @@ export class SubscriptionService {
             const periodEnd = new Date(cancelledSubscription.current_period_end * 1000);
             const periodStart = new Date(cancelledSubscription.current_period_start * 1000);
 
+            /** Add access till specific date */
+            const contentId = subscription.price.product.content.id;
+            const userId = subscription.user.id;
+            const result = await this.contentService.removeAccess({
+                contentId,
+                userId
+            });
+            const result2 = await this.contentService.grantAccess({
+                contentId,
+                userId,
+                endDate: periodEnd
+            });
+
             /** User can use this subscription till the end of the period */
             const finallyCancelledSub = await this.markSubscriptionAsCancelled({
                 subscriptionId: subscriptionId,
@@ -308,6 +321,13 @@ export class SubscriptionService {
             const subscription = await this.subscriptionRepo.changeSubscriptionEndDate({
                 subscriptionId: subscriptionId,
                 endDate: new Date()
+            });
+
+            /** Remove access */
+            const contentId = subscription.price.product.content.id;
+            const removedAccess = await this.contentService.removeAccess({
+                contentId,
+                userId: userSaved.id
             });
 
             const updatedSubscription = await this.updateSubscription({

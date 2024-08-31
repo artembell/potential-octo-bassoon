@@ -206,7 +206,16 @@ export class SubscriptionRepository {
                         },
                         take: 1
                     },
-                    user: true
+                    user: true,
+                    price: {
+                        include: {
+                            product: {
+                                include: {
+                                    content: true
+                                }
+                            }
+                        }
+                    }
                 }
             });
 
