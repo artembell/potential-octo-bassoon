@@ -9,7 +9,6 @@ import { AuthGuard } from './user/auth.guard';
 export const prismaClient = new PrismaClient();
 
 async function bootstrap() {
-    console.log('Bootstrap');
     const app = await NestFactory.create(AppModule, {
         rawBody: true
     });

@@ -6,7 +6,6 @@ import {
 import { useEffect, useState } from "react";
 
 export default function CheckoutForm() {
-    console.log({ domain: import.meta.env.VITE_DOMAIN });
     const stripe = useStripe();
     const elements = useElements();
 
@@ -16,7 +15,6 @@ export default function CheckoutForm() {
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        console.log({ stripe });
         if (!stripe) {
             return;
         }
@@ -82,8 +80,6 @@ export default function CheckoutForm() {
     const paymentElementOptions = {
         layout: "tabs"
     };
-
-    console.log(checkoutResult);
 
     return (
         <form id="payment-form" onSubmit={handleSubmit}>

@@ -90,7 +90,6 @@ export class SubscriptionService {
         userId,
     }: TSubscriptionServiceSubscribe) {
         try {
-            console.log(`- create subscription.`);
             const customer = await this.userService.findUserById(userId);
             if (customer === null) {
                 throw new Error(`No user with id ${userId}`);
@@ -108,7 +107,6 @@ export class SubscriptionService {
             });
 
             const idempotencyKey = stripeCustomerId + stripePriceId + subscription.id;
-            console.log(`idempotencyKey: ${idempotencyKey}`);
 
             const stripeSubscription = await this.stripeService.createSubscription({
                 customerId: stripeCustomerId,
@@ -512,7 +510,6 @@ export class SubscriptionService {
                 case 'customer.subscription.deleted': {
                     const data = event.data.object;
 
-                    console.log(data);
                 }
                 default: {
                     break;

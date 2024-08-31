@@ -23,7 +23,6 @@ export function CheckoutPage() {
         })
             .then((res) => res.json())
             .then((data) => {
-                console.log(data);
                 setClientSecret(data.clientSecret);
             });
     }, [clientSecret]);
@@ -33,8 +32,6 @@ export function CheckoutPage() {
         theme: 'flat',
         variables: { colorPrimaryText: '#262626' }
     };
-
-    console.log({ clientSecret });
 
     return (
         <div>

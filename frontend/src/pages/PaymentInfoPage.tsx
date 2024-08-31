@@ -10,15 +10,9 @@ export const PaymentInfoPage = () => {
     const [clientSecret, setClientSecret] = useState("");
     const [searchParams] = useSearchParams();
 
-    console.log({ searchParams });
-
     useEffect(() => {
-        console.log('search changed!');
-
-        console.log(searchParams.get('payment_intent'));
         const clientSecret = searchParams.get('payment_intent_client_secret');
         setClientSecret(clientSecret!);
-        console.log(searchParams.get('redirect_status'));
     }, [searchParams]);
 
     const options = {

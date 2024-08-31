@@ -17,7 +17,6 @@ export const SubscriptionsPage = () => {
     useEffect(() => {
         fetcher.getSubscriptions()
             .then(response => {
-                console.log(response);
                 dispatch(setSubscriptions(response.other));
             });
     }, []);
@@ -25,21 +24,21 @@ export const SubscriptionsPage = () => {
     function handleCancelSubscription(subscriptionId: string) {
         fetcher.handleCancelSubscription(subscriptionId)
             .then((response) => {
-                setSubscriptions(response.data);
+                dispatch(setSubscriptions(response.data));
             });
     }
 
     function handlePause(subscriptionId: string) {
         fetcher.handlePause(subscriptionId)
             .then((response) => {
-                setSubscriptions(response.data);
+                dispatch(setSubscriptions(response.data));
             });
     }
 
     function handleUnpause(subscriptionId: string) {
         fetcher.handleUnpause(subscriptionId)
             .then((response) => {
-                setSubscriptions(response.data);
+                dispatch(setSubscriptions(response.data));
             });
     }
 
@@ -48,7 +47,6 @@ export const SubscriptionsPage = () => {
     if (subscriptions !== null) {
         subs = subscriptions.map((sub) => {
             const part = sub.subscriptionParts[0];
-            console.log(part);
             let statusText = 'NOT ACTIVE';
             let color = 'white';
             if (sub.status === 'active') {
@@ -94,7 +92,7 @@ export const SubscriptionsPage = () => {
                             <div>
                                 <div>Start: {startDate}</div>
                                 {
-                                    endDate !== '-' && <div>End: {endDate}</div> 
+                                    endDate !== '-' && <div>End: {endDate}</div>
                                 }
                             </div>
                             <div><Price key={sub.price.id} price={sub.price} /></div>

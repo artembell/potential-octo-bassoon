@@ -19,8 +19,6 @@ export const LoginPage = () => {
     async function authorize() {
         fetcher.login(email)
             .then((response) => {
-                console.log(response);
-                // store.dispatch(setAuthorized(true));
                 navigate('/');
             });
     }

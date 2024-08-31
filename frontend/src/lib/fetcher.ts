@@ -81,7 +81,6 @@ class Fetcher {
             .then((response) => {
                 // localStorage.setItem('app-authorized', 'true');
 
-                console.log(response);
                 store.dispatch(setEmail(''));
                 store.dispatch(setAuthorized(true));
                 return response.json();

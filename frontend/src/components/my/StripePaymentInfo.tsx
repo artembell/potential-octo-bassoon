@@ -25,7 +25,6 @@ export const StripePaymentInfo = () => {
     }, [stripe]);
 
 
-    console.log(pi);
     return (
         <>
             <h1>Payment Info:</h1>

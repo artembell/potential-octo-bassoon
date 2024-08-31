@@ -15,7 +15,6 @@ export const InspectProductPage = () => {
         })
             .then((res) => res.json())
             .then((data) => {
-                console.log(data);
                 setPrice(data.data);
             });
     }, []);

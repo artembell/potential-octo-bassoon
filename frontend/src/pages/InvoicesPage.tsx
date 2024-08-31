@@ -8,13 +8,9 @@ export const InvoicesPage = () => {
         fetch('/api/invoices:')
             .then((response) => response.json())
             .then(invoices => {
-                console.log(invoices.upcomingInvoice);
-
                 setInvoices(invoices.data);
             });
     }, []);
-
-    console.log(invoices);
 
     return (
         <>

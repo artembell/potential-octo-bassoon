@@ -13,16 +13,11 @@ export const SubscriptionPaymentsPage = () => {
         fetch(`/api/invoices/${subscriptionId}`)
             .then((response) => response.json())
             .then(response => {
-                console.log(response);
                 setInvoices(response.data.invoices);
 
                 setPrice(response.data.price);
             });
     }, []);
-
-    // console.log(invoices);
-
-    console.log(price);
 
     let product;
     if (price !== null) {
