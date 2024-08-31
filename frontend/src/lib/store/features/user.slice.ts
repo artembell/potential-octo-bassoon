@@ -8,7 +8,7 @@ type UserState = {
 
 // Define the initial state using that type
 const initialState: UserState = {
-    authorized: false,
+    authorized: true,
     email: ''
 };
 

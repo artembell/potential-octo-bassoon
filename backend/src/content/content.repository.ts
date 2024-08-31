@@ -129,7 +129,7 @@ export class ContentRepository {
                     // ]
                 },
                 include: {
-                // select: {
+                    // select: {
                     content: {
                         select: {
                             product: {
@@ -144,10 +144,10 @@ export class ContentRepository {
 
             // return products
             return products.filter(cnt => {
-                if (cnt.endDate > new Date()) {
-                    return true
+                if (cnt.endDate === null || cnt.endDate > new Date()) {
+                    return true;
                 }
-                return false
+                return false;
             }).map((cnt) => cnt.content.product);
         } catch (e: unknown) {
             console.error(e);

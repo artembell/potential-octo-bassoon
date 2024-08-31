@@ -2,6 +2,14 @@ import { setAuthorized, setEmail } from "./store/features/user.slice";
 import { store } from "./store/store";
 
 class Fetcher {
+    private handle = async (response: Response) => {
+        if (response.status === 401) {
+            store.dispatch(setAuthorized(false));
+            throw new Error('Unathorized');
+        }
+        return response.json();
+    };
+
     async handleCancelSubscription(subscriptionId: string) {
         return fetch(`/api/subscription/cancel/${subscriptionId}`, {
             method: 'POST',
@@ -11,7 +19,8 @@ class Fetcher {
             },
             body: JSON.stringify({})
         })
-            .then((response) => response.json());
+            .then(this.handle)
+            .catch((e) => console.error(e));
     }
 
     async handlePause(subscriptionId: string) {
@@ -23,7 +32,8 @@ class Fetcher {
             },
             body: JSON.stringify({})
         })
-            .then((response) => response.json());
+            .then(this.handle)
+            .catch((e) => console.error(e));
     }
 
     async handleUnpause(subscriptionId: string) {
@@ -35,28 +45,26 @@ class Fetcher {
             },
             body: JSON.stringify({})
         })
-            .then((response) => response.json());
+            .then(this.handle)
+            .catch((e) => console.error(e));
     }
 
     async getSubscriptions() {
         return fetch('/api/subscriptions')
-            .then((response) => response.json());
+            .then(this.handle)
+            .catch((e) => console.error(e));
     }
 
     async getAllProducts() {
         return fetch("/api/products/all")
-            .then((response) => response.json());
+            .then(this.handle)
+            .catch((e) => console.error(e));
     }
 
     async getMyProducts() {
         return fetch("/api/products/my")
-            .then((response) => {
-                if (response.status === 401) {
-                    // store.dispatch(setAuthorized(false));
-                }
-                console.log(response);
-                return response.json();
-            });
+            .then(this.handle)
+            .catch((e) => console.error(e));
     }
 
     async login(email: string) {
@@ -71,8 +79,10 @@ class Fetcher {
             },
         })
             .then((response) => {
+                // localStorage.setItem('app-authorized', 'true');
+
                 console.log(response);
-                store.dispatch(setEmail(''))
+                store.dispatch(setEmail(''));
                 store.dispatch(setAuthorized(true));
                 return response.json();
             });

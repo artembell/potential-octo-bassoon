@@ -1,5 +1,6 @@
 import { useStripe } from "@stripe/react-stripe-js";
 import { useEffect, useState } from "react";
+import { Navigate } from "react-router-dom";
 
 export const StripePaymentInfo = () => {
     const stripe = useStripe();
@@ -28,6 +29,7 @@ export const StripePaymentInfo = () => {
     return (
         <>
             <h1>Payment Info:</h1>
+            <Navigate to="/" replace={true} />
             {/* <pre>
 
                 {

@@ -10,35 +10,13 @@ export function MyProductsPage() {
 
     useEffect(() => {
         fetcher.getMyProducts()
-            .then(({ data }) => {
-                console.log(data);
-                dispatch(setMy(data));
-                // setProducts(data);
+            .then((response) => {
+                if (response) {
+                    const { data } = response;
+                    dispatch(setMy(data));
+                }
             });
     }, []);
-
-
-
-    // let contentList;
-    // let contentCounter;
-    // if (content !== null) {
-    //     contentList = (
-    //         content.map((cnt) => {
-    //             return (
-    //                 <Card key={cnt.id} className="my-[10px]">
-    //                     <CardHeader>
-    //                         <CardTitle>{cnt.data}</CardTitle>
-    //                         {/* <CardDescription>Access to .</CardDescription> */}
-    //                     </CardHeader>
-    //                     {/* <CardContent className="flex flex-row gap-3">
-    //                         <div>{cnt.data}</div>
-    //                     </CardContent> */}
-    //                 </Card>
-    //             );
-    //         })
-    //     );
-    //     contentCounter = <div>{contentList.length} items</div>;
-    // }
 
     let productsList;
     let productsCounter;

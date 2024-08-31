@@ -21,7 +21,6 @@ export const PaymentInfoPage = () => {
         console.log(searchParams.get('redirect_status'));
     }, [searchParams]);
 
-
     const options = {
         clientSecret,
         theme: 'flat',

@@ -3,19 +3,21 @@ import './App.css';
 import {
     Link,
     Route,
-    Routes
+    Routes,
+    useNavigate
 } from "react-router-dom";
 import { AuthGuard } from './components/my/auth.hoc';
+import { useAppDispatch, useAppSelector } from './lib/store/hooks';
 import { InspectProductPage } from './pages/InspectProductPage';
 import { InvoicesPage } from './pages/InvoicesPage';
-import { LoginPage } from './pages/LoginPage';``
-import { LogoutPage } from './pages/LogoutPage';
 import { PaymentInfoPage } from './pages/PaymentInfoPage';
 import { SubscriptionPaymentsPage } from './pages/SubscriptionPaymentsPage';
 import { AllProductsPage } from './pages/all-products.page';
 import { CheckoutPage } from './pages/checkout.page';
 import { MyProductsPage } from './pages/my-products.page';
 import { SubscriptionsPage } from './pages/subscriptions.page';
+import { LoginPage } from './pages/login.page';
+import { LogoutPage } from './pages/logout.page';
 
 function App() {
     return (

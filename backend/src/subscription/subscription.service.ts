@@ -460,9 +460,11 @@ export class SubscriptionService {
             }
 
             const subId = parseInt(subscription.metadata['subscriptionId']);
-            const result = this.activateAccess({
+            const result = await this.activateAccess({
                 subId
             });
+            
+            return result
         } catch (e: unknown) {
             console.error(e);
         }
