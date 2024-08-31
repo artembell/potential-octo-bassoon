@@ -51,6 +51,8 @@ export class PriceController {
         };
     }
 
+
+    @Public()
     @Get('/product/:id')
     async getProduct(
         @Param() params: any
@@ -74,6 +76,7 @@ export class PriceController {
         };
     }
 
+    @Public()
     @Get('/prices/:productId')
     async getProductPrices(
         @Param() params: any,
@@ -98,6 +101,8 @@ export class PriceController {
         };
     }
 
+
+    @Public()
     @Get('/price/:id')
     async getPrice(
         @Param() params: any

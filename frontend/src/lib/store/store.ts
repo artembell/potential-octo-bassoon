@@ -1,12 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { contentReducer } from './features/content.slice';
 import { subscriptionsReducer } from './features/subscriptions.slice';
+import { userReducer } from './features/user.slice';
 // ...
 
 export const store = configureStore({
     reducer: {
         content: contentReducer,
-        subscriptions: subscriptionsReducer
+        subscriptions: subscriptionsReducer,
+        user: userReducer
     }
 });
 

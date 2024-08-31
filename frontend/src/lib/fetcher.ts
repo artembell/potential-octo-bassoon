@@ -1,3 +1,6 @@
+import { setAuthorized, setEmail } from "./store/features/user.slice";
+import { store } from "./store/store";
+
 class Fetcher {
     async handleCancelSubscription(subscriptionId: string) {
         return fetch(`/api/subscription/cancel/${subscriptionId}`, {
@@ -47,7 +50,42 @@ class Fetcher {
 
     async getMyProducts() {
         return fetch("/api/products/my")
-            .then((response) => response.json())
+            .then((response) => {
+                if (response.status === 401) {
+                    // store.dispatch(setAuthorized(false));
+                }
+                console.log(response);
+                return response.json();
+            });
+    }
+
+    async login(email: string) {
+        return fetch(`/api/authenticate`, {
+            method: 'POST',
+            body: JSON.stringify({
+                email
+            }),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+        })
+            .then((response) => {
+                console.log(response);
+                store.dispatch(setEmail(''))
+                store.dispatch(setAuthorized(true));
+                return response.json();
+            });
+    }
+
+    async logout() {
+        return fetch(`/api/logout`, {
+            method: 'POST'
+        })
+            .then((response) => {
+                store.dispatch(setAuthorized(false));
+                return response.json();
+            });
     }
 }
 

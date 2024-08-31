@@ -22,6 +22,7 @@ export class UserController {
         this.userService.handleEvent(event);
     }
 
+    @Public()
     @Post('logout')
     async logout(
         @Res() response: Response,

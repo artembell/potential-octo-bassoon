@@ -1,6 +1,9 @@
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { fetcher } from "@/lib/fetcher";
+import { setEmail } from "@/lib/store/features/user.slice";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export function ButtonDemo() {
@@ -9,34 +12,27 @@ export function ButtonDemo() {
 
 
 export const LoginPage = () => {
-    const [email, setEmail] = useState('web.zoom.dev@gmail.com');
     const navigate = useNavigate();
+    const { email } = useAppSelector((state) => state.user);
+    const dispatch = useAppDispatch();
 
     async function authorize() {
-        fetch(`/api/authenticate`, {
-            method: 'POST',
-            body: JSON.stringify({
-                email
-            }),
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-        })
+        fetcher.login(email)
             .then((response) => {
                 console.log(response);
-                return response.json();
-            })
-            .then((response) => {
-                console.log(response);
-
+                // store.dispatch(setAuthorized(true));
                 navigate('/');
             });
     }
 
+    useEffect(() => {
+        authorize()
+    }, [])
+  
+
     return (
         <div className="flex flex-row">
-            <Input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Email" />
+            <Input autoFocus value={email} onChange={(e) => dispatch(setEmail(e.target.value))} type="email" placeholder="Email" />
             <Button onClick={authorize}>Authorize</Button>
         </div>
     );
