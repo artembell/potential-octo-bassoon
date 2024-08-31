@@ -5,16 +5,16 @@ import {
     Route,
     Routes
 } from "react-router-dom";
-import { AllProductsPage } from './pages/AllProductsPage';
-import { CheckoutPage } from './pages/CheckoutPage';
+import { AllProductsPage } from './pages/all-products.page';
+import { CheckoutPage } from './pages/checkout.page';
 import { InspectProductPage } from './pages/InspectProductPage';
 import { InvoicesPage } from './pages/InvoicesPage';
 import { LoginPage } from './pages/LoginPage';
 import { LogoutPage } from './pages/LogoutPage';
 import { PaymentInfoPage } from './pages/PaymentInfoPage';
-import { SubscriptionsPage } from './pages/SubsciptionsPage';
+import { SubscriptionsPage } from './pages/subscriptions.page';
 import { SubscriptionPaymentsPage } from './pages/SubscriptionPaymentsPage';
-import { MyProductsPage } from './pages/MyProductsPage';
+import { MyProductsPage } from './pages/my-products.page';
 
 function App() {
     return (

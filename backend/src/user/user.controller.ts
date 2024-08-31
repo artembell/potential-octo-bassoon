@@ -4,6 +4,7 @@ import { Response } from 'express';
 import { APP_USER_ID_COOKIE, CUSTOMER_EVENTS_PATTERN } from 'src/constants';
 import { StripeService } from 'src/stripe/stripe.service';
 import { UserService } from './user.service';
+import { Public } from 'src/decorators/public';
 
 type TCreateUserInfo = {
     email: string;
@@ -32,6 +33,7 @@ export class UserController {
         });
     }
 
+    @Public()
     @Post('authenticate')
     async authenticate(
         @Body() details: TCreateUserInfo,

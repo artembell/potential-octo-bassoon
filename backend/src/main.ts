@@ -4,6 +4,7 @@ import { PrismaClient } from '@prisma/client';
 import * as cookieParser from 'cookie-parser';
 import { AppModule } from './app/app.module';
 import { WEBHOOK_QUEUE } from './constants';
+import { AuthGuard } from './user/auth.guard';
 
 export const prismaClient = new PrismaClient();
 

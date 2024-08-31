@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { StripeService } from './stripe.service';
+import { Public } from 'src/decorators/public';
 
 type TWebhookEvent = any;
 
@@ -18,6 +19,7 @@ export class StripeController {
     ) { }
 
     /** Secure this endpoint from unwanted requests */
+    @Public()
     @Post('webhook')
     receiveWebhooks(
         @Body() webhookEvent: TWebhookEvent,

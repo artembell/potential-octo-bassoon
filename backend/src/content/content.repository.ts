@@ -85,19 +85,39 @@ export class ContentRepository {
         userId: number;
     }) {
         try {
-            const content = await this.persistenceService.content.findMany({
+            // const content = await this.persistenceService.content.findMany({
+            //     where: {
+            //         users: {
+            //             some: {
+            //                 user: {
+            //                     id: userId
+            //                 }
+            //             }
+            //         }
+            //     },
+            //     include: {
+            //         product: true
+            //     }
+            // });
+
+            const products = await this.persistenceService.product.findMany({
                 where: {
-                    users: {
-                        some: {
-                            user: {
-                                id: userId
+                    content: {
+                        users: {
+                            some: {
+                                user: {
+                                    id: userId
+                                }
                             }
                         }
                     }
+                },
+                include: {
+                    content: true
                 }
             });
 
-            return content;
+            return products;
         } catch (e: unknown) {
             console.error(e);
         }

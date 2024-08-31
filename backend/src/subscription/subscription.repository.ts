@@ -131,7 +131,10 @@ export class SubscriptionRepository {
         try {
             const subscriptions = await this.persistenceService.subscription.findMany({
                 where: {
-                    userId: userId
+                    userId: userId,
+                    status: {
+                        not: 'not_active'
+                    }
                 },
                 include: {
                     subscriptionParts: {
@@ -157,8 +160,7 @@ export class SubscriptionRepository {
     async updateSubscription({
         subscriptionId,
         metadata,
-        status,
-
+        status
     }: TUpdateSubscription & { subscriptionId: number; }) {
         try {
             const subscription = await this.persistenceService.subscription.update({

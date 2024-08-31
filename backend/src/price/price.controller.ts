@@ -5,6 +5,7 @@ import { TCreatePrice, TCreateProduct } from 'src/subscription/subscription.cont
 import Stripe from 'stripe';
 import { PriceRepository } from './price.repository';
 import { PriceService } from './price.service';
+import { Public } from 'src/decorators/public';
 
 @Controller()
 export class PriceController {
@@ -13,9 +14,14 @@ export class PriceController {
         private readonly priceService: PriceService
     ) { }
 
+    @Public()
     @Get('/products/all')
     async getAllProduct() {
-        const products = await prismaClient.product.findMany();
+        const products = await prismaClient.product.findMany({
+            include: {
+                prices: true
+            }
+        });
 
         if (products === null) {
             throw new NotFoundException();
